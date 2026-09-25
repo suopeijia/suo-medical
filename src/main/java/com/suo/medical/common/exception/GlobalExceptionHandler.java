@@ -1,6 +1,7 @@
 package com.suo.medical.common.exception;
 import com.suo.medical.common.enums.ResultCode;
 import com.suo.medical.common.response.Result;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,6 +22,11 @@ public class GlobalExceptionHandler {
     public Result<?> handleValidation(MethodArgumentNotValidException e){
         String validateMessage = e.getBindingResult().getFieldError().getDefaultMessage();
         return Result.error(400,validateMessage);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Result<?> handleConstraint(ConstraintViolationException e){
+        return Result.error(400,e.getMessage());
     }
 
     /**
