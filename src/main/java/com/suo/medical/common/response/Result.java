@@ -31,6 +31,11 @@ public class Result<T>{
         return result;
     }
 
-
+    public static <T> Result<T> error(ResultCode resultCode){
+        Result<T> result = new Result<>();
+        result.setMessage(resultCode.getMessage());
+        result.setCode(resultCode.getCode());
+        return result;
+    }
 
 }

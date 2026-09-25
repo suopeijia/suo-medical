@@ -1,5 +1,7 @@
 package com.suo.medical.service.Impl;
 
+import com.suo.medical.common.enums.ResultCode;
+import com.suo.medical.common.exception.BusinessException;
 import com.suo.medical.common.response.Result;
 import com.suo.medical.entity.Patient;
 import com.suo.medical.mapper.PatientMapper;
@@ -15,7 +17,11 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Patient getPatientById(Long id) {
-        return patientMapper.selectById(id);
+        Patient patient = patientMapper.selectById(id);
+        if(patient == null){
+            throw new BusinessException(ResultCode.PATINENT_NOT_FOUND);
+        }
+        return patient;
     }
 
     @Override
