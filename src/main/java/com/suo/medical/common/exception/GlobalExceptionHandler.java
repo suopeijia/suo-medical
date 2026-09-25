@@ -1,6 +1,8 @@
 package com.suo.medical.common.exception;
+import com.suo.medical.common.enums.ResultCode;
 import com.suo.medical.common.response.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,6 +15,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public Result<?> handleBusinessException(BusinessException e) {
         return Result.error(e.getResultCode());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result<?> handleValidation(MethodArgumentNotValidException e){
+        String validateMessage = e.getBindingResult().getFieldError().getDefaultMessage();
+        return Result.error(400,validateMessage);
     }
 
     /**

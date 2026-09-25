@@ -1,10 +1,12 @@
 package com.suo.medical.controller;
 
+import com.suo.medical.DTO.PatientAddDTO;
 import com.suo.medical.common.response.Result;
 import com.suo.medical.entity.Patient;
 import com.suo.medical.service.PatientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +34,11 @@ public class PatientController {
 
     @Operation(summary = "添加患者信息")
     @PostMapping("/addPatient")
-    public Result<Long>  addPatient(@RequestBody Patient patient){
-        patientService.addPatient(patient);
-        return Result.success(patient.getId());
+    public Result<Long>  addPatient(@Valid @RequestBody PatientAddDTO patientAddDTO){
+        Patient patient = new Patient();
+        patient.setAge(patientAddDTO.getAge());
+        patient.setName(patientAddDTO.getName());
+        return Result.success(patientService.addPatient(patient));
     }
 
     @Operation(summary = "更新患者信息")

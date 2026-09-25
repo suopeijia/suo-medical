@@ -19,7 +19,7 @@ public class PatientServiceImpl implements PatientService {
     public Patient getPatientById(Long id) {
         Patient patient = patientMapper.selectById(id);
         if(patient == null){
-            throw new BusinessException(ResultCode.PATINENT_NOT_FOUND);
+            throw new BusinessException(ResultCode.PATIENT_NOT_FOUND);
         }
         return patient;
     }
