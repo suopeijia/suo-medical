@@ -3,6 +3,7 @@ import com.suo.medical.common.enums.ResultCode;
 import com.suo.medical.common.response.Result;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -39,5 +40,10 @@ public class GlobalExceptionHandler {
     public Result<?> handleException(Exception e) {
         log.error("系统异常", e);
         return Result.error();
+    }
+
+    @ExceptionHandler(DuplicateKeyException.class)
+    public Result<?> handleDuplicate(DuplicateKeyException e){
+        return Result.error(ResultCode.DEPARTMENT_EXIST);
     }
 }

@@ -5,29 +5,19 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 /**
- * 患者
+ * 科室
  */
 @Data
-public class Patient {
+public class Department {
 
     /**
-     * id
+     * Id
      */
     @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     * 姓名
+     * 科室名称
      */
     private String name;
-
-    /**
-     * 年龄
-     */
-    private Integer age;
-
-    /**
-     * 科室Id
-     */
-    private Long departmentId;
 }

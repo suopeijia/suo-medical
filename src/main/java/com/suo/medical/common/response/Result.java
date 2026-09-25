@@ -1,4 +1,4 @@
-package com.suo.medical.common.response;
+package com.suo.medical.common.response;//package com.suo.medical.common.response;
 
 import com.suo.medical.common.enums.ResultCode;
 import lombok.Data;
@@ -9,13 +9,17 @@ public class Result<T>{
     private String message;
     private T data;
 
-//    public static <T> Result<T> error(String message){
-//        Result<Object> result = new Result<>();
-//        result.setMessage(message);
-//        return result.;
-//    }
 
-    public static <T> Result<T> error(Integer code,String message){
+
+    public static <T> Result<T> error(String message){
+        Result<T> result = new Result<>();
+        result.setMessage(message);
+        return result;
+    }
+
+
+
+public static <T> Result<T> error(Integer code, String message){
         Result<T> result = new Result<>();
         result.setCode(code);
         result.setMessage(message);
@@ -52,3 +56,39 @@ public class Result<T>{
     }
 
 }
+
+
+//重写统一返回体
+//@Data
+//public class Result<T>{
+//    private Integer code;
+//    private String message;
+//    private T data;
+//
+//    public static <T> Result<T> success(T data){
+//        Result<T> result = new Result<>();
+//        result.setCode(ResultCode.SUCCESS.getCode());
+//        result.setMessage(ResultCode.SUCCESS.getMessage());
+//        result.setData(data);
+//        return result;
+//    }
+//
+//    public static <T> Result<T> sucess(){
+//        return success(null);
+//    }
+//
+//    public static <T> Result<T> error(){
+//        Result<T> result = new Result<>();
+//        result.setMessage(ResultCode.ERROR.getMessage());
+//        result.setCode(ResultCode.ERROR.getCode());
+//        return result;
+//    }
+//
+//        public static <T> Result<T> error(ResultCode resultCode){
+//        Result<T> result = new Result<>();
+//        result.setMessage(resultCode.getMessage());
+//        result.setCode(resultCode.getCode());
+//        return result;
+//    }
+//
+//}

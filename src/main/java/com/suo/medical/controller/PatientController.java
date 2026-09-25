@@ -5,6 +5,7 @@ import com.suo.medical.DTO.PatientUpdateDTO;
 import com.suo.medical.common.response.Result;
 import com.suo.medical.entity.Patient;
 import com.suo.medical.service.PatientService;
+import com.suo.medical.tool.PageUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -33,13 +35,13 @@ public class PatientController {
 
     @Operation(summary = "根据id获取患者信息")
     @GetMapping("/{id}")
-    public Result<Patient> getPatientById(@PathVariable Long id){
+    public Result<Patient> getPatientById(@PathVariable Long id) {
         return Result.success(patientService.getPatientById(id));
     }
 
     @Operation(summary = "添加患者信息")
     @PostMapping("/addPatient")
-    public Result<Long>  addPatient(@Valid @RequestBody PatientAddDTO patientAddDTO){
+    public Result<Long> addPatient(@Valid @RequestBody PatientAddDTO patientAddDTO) {
         Patient patient = new Patient();
         patient.setAge(patientAddDTO.getAge());
         patient.setName(patientAddDTO.getName());
@@ -48,7 +50,7 @@ public class PatientController {
 
     @Operation(summary = "更新患者信息")
     @PutMapping("/updatePatient/{id}")
-    public Result<Patient> updatePatient(@Min(value = 0,message = "ID不能小于0") @PathVariable Long id , @Valid @RequestBody PatientUpdateDTO patientUpdateDTO){
+    public Result<Patient> updatePatient(@Min(value = 0, message = "ID不能小于0") @PathVariable Long id, @Valid @RequestBody PatientUpdateDTO patientUpdateDTO) {
         Patient patient = new Patient();
         patient.setId(id);
         patient.setAge(patientUpdateDTO.getAge());
@@ -62,4 +64,18 @@ public class PatientController {
     public Result<Long> deleteById(@PathVariable Long id) {
         return Result.success(patientService.deleteById(id));
     }
+
+    //分页查询
+    @Operation(summary = "分页查询患者信息")
+    @GetMapping("/page")
+    public Result<PageUtil<Patient>> page(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer minAge,
+            @RequestParam(required = false) Integer maxAge,
+            @RequestParam(defaultValue = "1") Long current,
+            @RequestParam(defaultValue = "10") Long size){
+        return Result.success(patientService.getPagePatient(name, minAge, maxAge, current, size));
+    }
+
+
 }

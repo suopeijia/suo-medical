@@ -1,14 +1,15 @@
 package com.suo.medical.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 /**
- * 患者
+ * 医生
  */
 @Data
-public class Patient {
+public class Doctor {
 
     /**
      * id
@@ -22,12 +23,8 @@ public class Patient {
     private String name;
 
     /**
-     * 年龄
-     */
-    private Integer age;
-
-    /**
-     * 科室Id
+     * 坐诊科室Id
      */
     private Long departmentId;
+
 }

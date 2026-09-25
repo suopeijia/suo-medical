@@ -4,30 +4,26 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
-/**
- * 患者
- */
 @Data
-public class Patient {
-
+public class Medicine {
     /**
-     * id
+     * 药品id
      */
     @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     * 姓名
+     * 药品名称
      */
     private String name;
 
     /**
-     * 年龄
+     * 药品价格
      */
-    private Integer age;
+    private Double price;
 
     /**
-     * 科室Id
+     * 药品库存
      */
-    private Long departmentId;
+    private Integer stock;
 }

@@ -10,7 +10,9 @@ public enum ResultCode {
     SUCCESS(200, "操作成功"),
     ERROR(500, "操作失败"),
     PATIENT_NOT_FOUND(1001, "患者不存在"),
-    PARAM_ERROR(400,"参数错误");
+    PARAM_ERROR(400,"参数错误"),
+    DEPARTMENT_NOT_EXIST(400,"科室不存在" ),
+    DEPARTMENT_EXIST(400,"科室已经存在" );
 
 
     private final Integer code;
