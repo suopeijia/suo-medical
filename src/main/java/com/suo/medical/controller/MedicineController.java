@@ -6,6 +6,7 @@ import com.suo.medical.common.response.Result;
 import com.suo.medical.entity.Medicine;
 import com.suo.medical.service.MedicineService;
 import com.suo.medical.tool.PageUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.naming.Name;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,9 +40,10 @@ public class MedicineController {
         return Result.success(medicineService.removeById(id, flag));
     }
 
+    @Operation(summary = "更新药品")
     @PutMapping("/update")
-    public Result<Boolean> updateMedicine(@RequestBody Medicine medicine) {
-        return Result.success(medicineService.updateById(medicine));
+    public Result<Medicine> updateMedicine(@RequestBody Medicine medicine) {
+        return Result.success(medicineService.updateByIdBySelf(medicine));
     }
 
     @GetMapping("/get")
@@ -52,6 +56,7 @@ public class MedicineController {
     public Result<PageUtil<Medicine>> getMedicines(@RequestParam Integer current, @RequestParam Integer size) {
         return Result.success(PageUtil.of(medicineService.page(new Page(current,size))));
     }
+
 
     @GetMapping("/getMedicineWithCache")
     public Result<Medicine> getMedicineWithCache(@RequestParam Long id) {

@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarEntry;
 
@@ -52,14 +53,23 @@ public class MedicineServiceImpl extends ServiceImpl<MedicineMapper, Medicine>
         }else {
             //Redis没有则查数据库，并放入Redis
             Medicine medicine = medicineMapper.selectById(id);
+            long expireTime = 30*60+new Random().nextInt(10) + 1;
             if(medicine != null){
-                redisTemplate.opsForValue().set(key,medicine,30, TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(key,medicine,expireTime, TimeUnit.SECONDS);
             }else {
-                redisTemplate.opsForValue().set(key,null);
+                redisTemplate.opsForValue().set(key,null,120, TimeUnit.SECONDS);
             }
 
             return medicine;
         }
     }
 
+    @Override
+    public Medicine updateByIdBySelf(Medicine medicine) {
+        //先更新Mysql
+        medicineMapper.updateById(medicine);
+        //再删除缓存
+        redisTemplate.delete("medicine:" + medicine.getId());
+        return medicine;
+    }
 }
