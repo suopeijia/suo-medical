@@ -9,4 +9,9 @@ public interface  MedicineService extends IService<Medicine> {
     Medicine getMedicineWithCache(Long id);
 
     Medicine updateByIdBySelf(Medicine medicine);
+
+    /**
+     * 扣减库存
+     */
+    Boolean deductStock(Long id, int num);
 }

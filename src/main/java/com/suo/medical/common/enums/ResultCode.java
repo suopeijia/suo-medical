@@ -12,7 +12,8 @@ public enum ResultCode {
     PATIENT_NOT_FOUND(1001, "患者不存在"),
     PARAM_ERROR(400,"参数错误"),
     DEPARTMENT_NOT_EXIST(400,"科室不存在" ),
-    DEPARTMENT_EXIST(400,"科室已经存在" );
+    DEPARTMENT_EXIST(400,"科室已经存在" ),
+    STOCK_NOT_ENOUGH(400,"库存不足" );
 
 
     private final Integer code;

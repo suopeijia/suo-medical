@@ -36,7 +36,7 @@ public class MedicineController {
 
     @OperationLog("删除药品")
     @DeleteMapping("/delete")
-    public Result<Boolean> deleteMedicine(@RequestParam Long id,@RequestParam boolean flag) {
+    public Result<Boolean> deleteMedicine(@RequestParam Long id, @RequestParam boolean flag) {
         return Result.success(medicineService.removeById(id, flag));
     }
 
@@ -54,12 +54,21 @@ public class MedicineController {
     @OperationLog("药品分页查询")
     @GetMapping("/getMedicines")
     public Result<PageUtil<Medicine>> getMedicines(@RequestParam Integer current, @RequestParam Integer size) {
-        return Result.success(PageUtil.of(medicineService.page(new Page(current,size))));
+        return Result.success(PageUtil.of(medicineService.page(new Page(current, size))));
     }
 
 
     @GetMapping("/getMedicineWithCache")
     public Result<Medicine> getMedicineWithCache(@RequestParam Long id) {
         return Result.success(medicineService.getMedicineWithCache(id));
+    }
+
+    /**
+     * 扣减库存
+     */
+    @PostMapping("/deductStock")
+    @Transactional
+    public Result<Boolean> deductStock(@RequestParam Long id, @RequestParam int num) {
+        return Result.success(medicineService.deductStock(id, num));
     }
 }

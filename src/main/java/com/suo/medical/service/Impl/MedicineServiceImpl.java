@@ -1,11 +1,16 @@
 package com.suo.medical.service.Impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.suo.medical.common.enums.ResultCode;
+import com.suo.medical.common.exception.BusinessException;
 import com.suo.medical.entity.Medicine;
 import com.suo.medical.mapper.MedicineMapper;
 import com.suo.medical.service.MedicineService;
+import io.lettuce.core.RedisClient;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +28,7 @@ public class MedicineServiceImpl extends ServiceImpl<MedicineMapper, Medicine>
 
     private final RedisTemplate redisTemplate;
 
+    private final RedissonClient redissonClient;
 
     @Transactional
     public Boolean removeById(Long id, boolean flag) {
@@ -71,5 +77,28 @@ public class MedicineServiceImpl extends ServiceImpl<MedicineMapper, Medicine>
         //再删除缓存
         redisTemplate.delete("medicine:" + medicine.getId());
         return medicine;
+    }
+
+    @Override
+    public Boolean deductStock(Long id, int num) {
+        //拿到锁对象
+        RLock lock = redissonClient.getLock("lock:medicine:"+id);
+        //加锁
+        lock.lock();
+        try{
+            //在锁内做“查库存”并进行判断
+            Medicine medicine = medicineMapper.selectById(id);
+            if(medicine.getStock() < num){
+                throw new BusinessException(ResultCode.STOCK_NOT_ENOUGH);
+            }
+            medicine.setStock(medicine.getStock() - num);
+            medicineMapper.updateById(medicine);
+            //删缓存
+            redisTemplate.delete("medicine:" + medicine.getId());
+        }finally {
+            //释放锁
+            lock.unlock();
+        }
+        return null;
     }
 }
