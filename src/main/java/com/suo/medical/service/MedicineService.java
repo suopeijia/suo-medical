@@ -5,4 +5,6 @@ import com.suo.medical.entity.Medicine;
 
 public interface  MedicineService extends IService<Medicine> {
     Boolean removeById(Long id, boolean flag);
+
+    Medicine getMedicineWithCache(Long id);
 }

@@ -52,4 +52,9 @@ public class MedicineController {
     public Result<PageUtil<Medicine>> getMedicines(@RequestParam Integer current, @RequestParam Integer size) {
         return Result.success(PageUtil.of(medicineService.page(new Page(current,size))));
     }
+
+    @GetMapping("/getMedicineWithCache")
+    public Result<Medicine> getMedicineWithCache(@RequestParam Long id) {
+        return Result.success(medicineService.getMedicineWithCache(id));
+    }
 }
