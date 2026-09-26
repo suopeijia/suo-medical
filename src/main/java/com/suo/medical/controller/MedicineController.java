@@ -1,6 +1,7 @@
 package com.suo.medical.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.suo.medical.annotation.OperationLog;
 import com.suo.medical.common.response.Result;
 import com.suo.medical.entity.Medicine;
 import com.suo.medical.service.MedicineService;
@@ -30,6 +31,7 @@ public class MedicineController {
         return Result.success(medicineService.save(medicine));
     }
 
+    @OperationLog("删除药品")
     @DeleteMapping("/delete")
     public Result<Boolean> deleteMedicine(@RequestParam Long id,@RequestParam boolean flag) {
         return Result.success(medicineService.removeById(id, flag));
@@ -45,6 +47,7 @@ public class MedicineController {
         return Result.success(medicineService.getById(id));
     }
 
+    @OperationLog("药品分页查询")
     @GetMapping("/getMedicines")
     public Result<PageUtil<Medicine>> getMedicines(@RequestParam Integer current, @RequestParam Integer size) {
         return Result.success(PageUtil.of(medicineService.page(new Page(current,size))));

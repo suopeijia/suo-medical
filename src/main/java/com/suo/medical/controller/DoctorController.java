@@ -3,6 +3,8 @@ package com.suo.medical.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suo.medical.DTO.DoctorDTO;
 import com.suo.medical.DTO.DoctorDTO;
+import com.suo.medical.VO.DoctorVO;
+import com.suo.medical.annotation.OperationLog;
 import com.suo.medical.common.response.Result;
 import com.suo.medical.entity.Doctor;
 import com.suo.medical.entity.Doctor;
@@ -33,6 +35,7 @@ public class DoctorController {
     /**
      * 医生分页查询
      */
+    @OperationLog("医生分页查询")
     @GetMapping("/page")
     @Operation(summary = "医生分页查询")
     public Result<PageUtil<Doctor>> getPageDoctor(@RequestParam(required = false) String name,
@@ -75,5 +78,13 @@ public class DoctorController {
     @Operation(summary = "医生删除")
     public Result<Boolean> deleteDoctor(@RequestParam Long id){
         return Result.success(doctorService.deleteDoctor(id));
+    }
+
+    //手写sql联表查询
+    @GetMapping("/getDoctorVOById")
+    @Operation(summary = "医生VO查询")
+    @OperationLog("医生VO分页查询")
+    public Result<DoctorVO> getDoctorVOById(@RequestParam Long id){
+        return Result.success(doctorService.getDoctorVOById(id));
     }
 }

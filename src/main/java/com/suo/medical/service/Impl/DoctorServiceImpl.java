@@ -3,6 +3,7 @@ package com.suo.medical.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suo.medical.DTO.DoctorDTO;
+import com.suo.medical.VO.DoctorVO;
 import com.suo.medical.common.enums.ResultCode;
 import com.suo.medical.common.exception.BusinessException;
 import com.suo.medical.entity.Department;
@@ -83,5 +84,10 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setDepartmentId(department.getId());
         doctorMapper.updateById(doctor);
         return doctorDTO;
+    }
+
+    @Override
+    public DoctorVO getDoctorVOById(Long id) {
+        return doctorMapper.selectDoctorWithDept(id);
     }
 }

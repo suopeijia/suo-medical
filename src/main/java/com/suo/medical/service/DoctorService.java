@@ -1,6 +1,7 @@
 package com.suo.medical.service;
 
 import com.suo.medical.DTO.DoctorDTO;
+import com.suo.medical.VO.DoctorVO;
 import com.suo.medical.entity.Doctor;
 import com.suo.medical.tool.PageUtil;
 
@@ -15,4 +16,6 @@ public interface DoctorService {
     DoctorDTO getByIdDoctor(Long id);
 
     Boolean deleteDoctor(Long id);
+
+    DoctorVO getDoctorVOById(Long id);
 }
