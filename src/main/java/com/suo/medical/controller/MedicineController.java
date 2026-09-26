@@ -7,6 +7,7 @@ import com.suo.medical.service.MedicineService;
 import com.suo.medical.tool.PageUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,8 +31,8 @@ public class MedicineController {
     }
 
     @DeleteMapping("/delete")
-    public Result<Boolean> deleteMedicine(@RequestParam Long id) {
-        return Result.success(medicineService.removeById(id));
+    public Result<Boolean> deleteMedicine(@RequestParam Long id,@RequestParam boolean flag) {
+        return Result.success(medicineService.removeById(id, flag));
     }
 
     @PutMapping("/update")
