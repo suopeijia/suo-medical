@@ -26,19 +26,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/patients")
 @RequiredArgsConstructor
-@Tag(name = "患者信息", description = "患者信息相关操作")
+@Tag(name = "患者管理", description = "患者信息相关操作")
 @Validated
 public class PatientController {
 
     private final PatientService patientService;
 
 
+    /**
+     * 根据 id 获取患者信息。
+     *
+     * @param id 患者主键 id
+     * @return 患者信息
+     */
     @Operation(summary = "根据id获取患者信息")
     @GetMapping("/{id}")
     public Result<Patient> getPatientById(@PathVariable Long id) {
         return Result.success(patientService.getPatientById(id));
     }
 
+    /**
+     * 添加患者信息。
+     *
+     * @param patientAddDTO 患者新增入参
+     * @return 新增患者的主键 id
+     */
     @Operation(summary = "添加患者信息")
     @PostMapping("/addPatient")
     public Result<Long> addPatient(@Valid @RequestBody PatientAddDTO patientAddDTO) {
@@ -48,6 +60,13 @@ public class PatientController {
         return Result.success(patientService.addPatient(patient));
     }
 
+    /**
+     * 更新患者信息。
+     *
+     * @param id               患者主键 id
+     * @param patientUpdateDTO 患者更新入参
+     * @return 更新后的患者信息
+     */
     @Operation(summary = "更新患者信息")
     @PutMapping("/updatePatient/{id}")
     public Result<Patient> updatePatient(@Min(value = 0, message = "ID不能小于0") @PathVariable Long id, @Valid @RequestBody PatientUpdateDTO patientUpdateDTO) {
@@ -59,13 +78,28 @@ public class PatientController {
         return Result.success(patient);
     }
 
+    /**
+     * 根据 id 删除患者信息。
+     *
+     * @param id 患者主键 id
+     * @return 删除影响的记录数
+     */
     @Operation(summary = "根据id删除患者信息")
     @DeleteMapping("/deleteById/{id}")
     public Result<Long> deleteById(@PathVariable Long id) {
         return Result.success(patientService.deleteById(id));
     }
 
-    //分页查询
+    /**
+     * 分页查询患者信息，支持按姓名、年龄区间过滤。
+     *
+     * @param name    患者姓名，模糊匹配，可为空
+     * @param minAge  最小年龄，可为空
+     * @param maxAge  最大年龄，可为空
+     * @param current 当前页码，默认 1
+     * @param size    每页大小，默认 10
+     * @return 分页患者信息
+     */
     @Operation(summary = "分页查询患者信息")
     @GetMapping("/page")
     public Result<PageUtil<Patient>> page(

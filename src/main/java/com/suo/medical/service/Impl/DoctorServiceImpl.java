@@ -17,15 +17,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 医生服务实现类，实现医生的增删改查、分页查询及联表查询业务。
+ *
+ * @author suo
+ */
 @Service
 @RequiredArgsConstructor
 @Tag(name = "医生管理",description = "医生管理")
 public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorMapper doctorMapper;
-    
+
     private final DepartmentMapper departmentMapper;
 
+    /**
+     * 新增医生：根据科室名称查出科室 id 后落库，科室不存在则抛业务异常。
+     *
+     * @param doctorDTO 医生入参
+     * @return 新增后的医生信息
+     */
     @Override
     public Doctor adddoctorDTO(DoctorDTO doctorDTO) {
         Doctor doctor = new Doctor();
@@ -40,6 +51,12 @@ public class DoctorServiceImpl implements DoctorService {
         return doctor;
     }
 
+    /**
+     * 根据 id 查询医生，并附带其所属科室名称。
+     *
+     * @param id 医生主键 id
+     * @return 医生信息
+     */
     @Override
     public DoctorDTO getByIdDoctor(Long id) {
         Doctor doctor = doctorMapper.selectById(id);
@@ -55,11 +72,25 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorDTO;
     }
 
+    /**
+     * 根据 id 删除医生。
+     *
+     * @param id 医生主键 id
+     * @return 是否删除成功
+     */
     @Override
     public Boolean deleteDoctor(Long id) {
         return doctorMapper.deleteById(id) > 0;
     }
 
+    /**
+     * 分页查询医生，支持按姓名模糊过滤。
+     *
+     * @param name    医生姓名，模糊匹配，可为空
+     * @param current 当前页码
+     * @param size    每页大小
+     * @return 分页医生信息
+     */
     @Override
     public PageUtil<Doctor> getPageDoctor(String name, Long current, Long size) {
         LambdaQueryWrapper<Doctor> queryWrapper = new LambdaQueryWrapper<>();
@@ -69,6 +100,12 @@ public class DoctorServiceImpl implements DoctorService {
         return PageUtil.of(page);
     }
 
+    /**
+     * 修改医生：根据科室名称查出科室 id 后更新，科室不存在则抛业务异常。
+     *
+     * @param doctorDTO 医生入参
+     * @return 修改后的医生信息
+     */
     @Override
     @Transactional
     public DoctorDTO updateDoctor(DoctorDTO doctorDTO) {
@@ -86,6 +123,12 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorDTO;
     }
 
+    /**
+     * 根据 id 联表查询医生及其科室信息。
+     *
+     * @param id 医生主键 id
+     * @return 含科室名称的医生视图对象
+     */
     @Override
     public DoctorVO getDoctorVOById(Long id) {
         return doctorMapper.selectDoctorWithDept(id);
